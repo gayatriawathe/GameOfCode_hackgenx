@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSight - AI-Powered Facility Monitoring</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-eye"></i> CleanSight</h3>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-video"></i>
+                        <span>Live Monitoring</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="alertsLink">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                        <span class="badge rounded-pill" id="alertCount">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>CleanSight &copy; 2025</p>
+                <p class="version">v1.0</p>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1>Dashboard</h1>
+                    <p class="text-muted">Welcome to your CleanSight monitoring center</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <span>Admin User</span>
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card garbage">
+                    <div class="stat-icon">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="totalDetections">32</h3>
+                        <p>Garbage Detected</p>
+                        <span class="stat-tag">Today</span>
+                    </div>
+                </div>
+                <div class="stat-card spills">
+                    <div class="stat-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="pendingAlerts">0</h3>
+                        <p>Spills Detected</p>
+                        <span class="stat-tag">Today</span>
+                    </div>
+                </div>
+                <div class="stat-card tasks-assigned">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="resolvedAlerts">14</h3>
+                        <p>Tasks Assigned</p>
+                        <span class="stat-tag">Today</span>
+                    </div>
+                </div>
+                <div class="stat-card tasks-completed">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="avgResponseTime">6</h3>
+                        <p>Tasks Completed</p>
+                        <span class="stat-tag">Today</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Table -->
+            <div class="dashboard-card tasks-table-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-tasks"></i> Recent Tasks</h5>
+                    <div class="card-actions">
+                        <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> New Task</button>
+                        <button class="btn btn-sm"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Timestamp</th>
+                                    <th>Location</th>
+                                    <th>Assigned To</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tasksTableBody">
+                                <!-- Example data - will be replaced dynamically -->
+                                <tr>
+                                    <td>#1</td>
+                                    <td>2025-04-16 10:23:45</td>
+                                    <td>Camera 1</td>
+                                    <td>Cleaning Team 1</td>
+                                    <td><span class="badge bg-success">Resolved</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#2</td>
+                                    <td>2025-04-16 11:42:12</td>
+                                    <td>Camera 1</td>
+                                    <td>Cleaning Team 2</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Modal (same as in index.html) -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="alertModalLabel"><i class="fas fa-exclamation-triangle"></i> Garbage Alert!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 id="alertMessage">Garbage detected! Cleanup required.</h4>
+                            <p><strong>Location:</strong> <span id="alertLocation">Camera 1</span></p>
+                            <p><strong>Time:</strong> <span id="alertTime"></span></p>
+                        </div>
+                        <div>
+                            <span class="alert-priority badge bg-danger">High Priority</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="form-group">
+                            <label for="assignSelect"><strong>Assign to:</strong></label>
+                            <select class="form-select" id="assignSelect">
+                                <option value="team1">Cleaning Team 1</option>
+                                <option value="team2">Cleaning Team 2</option>
+                                <option value="team3">Maintenance Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="resolveAlertBtn">Mark as Resolved</button>
+                    <button type="button" class="btn btn-success" id="assignTaskBtn">Assign Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html> 
