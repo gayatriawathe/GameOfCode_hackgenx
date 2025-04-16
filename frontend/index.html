@@ -4,352 +4,185 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CleanSight - AI-Powered Facility Hygiene Monitoring</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-eye"></i>
-            <h2>CleanSight</h2>
-        </div>
-        <ul class="nav-links">
-            <li class="active" data-page="dashboard">
-                <a href="#"><i class="fas fa-chart-line"></i> Dashboard</a>
-            </li>
-            <li data-page="detections">
-                <a href="#"><i class="fas fa-camera"></i> Detections</a>
-            </li>
-            <li data-page="tasks">
-                <a href="#"><i class="fas fa-tasks"></i> Tasks</a>
-            </li>
-            <li data-page="cleaners">
-                <a href="#"><i class="fas fa-users"></i> Cleaners</a>
-            </li>
-            <li data-page="monitoring">
-                <a href="#"><i class="fas fa-video"></i> Live Monitoring</a>
-            </li>
-        </ul>
-        <div class="sidebar-footer">
-            <p>CleanSight v1.0</p>
-        </div>
-    </div>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>CleanSight</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#alerts"><i class="fas fa-bell"></i> Alerts</a></li>
+                <li><a href="#tasks"><i class="fas fa-tasks"></i> Tasks</a></li>
+                <li><a href="#analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </nav>
 
-    <div class="main-content">
-        <div class="header">
-            <div class="toggle-sidebar">
-                <i class="fas fa-bars"></i>
-            </div>
-            <div class="header-title">
-                <h1>Dashboard</h1>
-            </div>
-            <div class="header-actions">
-                <button id="refresh-btn" class="btn btn-outline">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-                <button id="start-monitoring-btn" class="btn btn-primary">
-                    <i class="fas fa-play"></i> Start Monitoring
-                </button>
-            </div>
-        </div>
+        <main class="main-content">
+            <header>
+                <div class="header-content">
+                    <h1>Dashboard</h1>
+                    <div class="user-info">
+                        <span class="user-name">Admin User</span>
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </header>
 
-        <!-- Dashboard Page -->
-        <div class="page-content" id="dashboard-page">
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon trash">
-                        <i class="fas fa-trash"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Trash Detections</h3>
-                        <p id="trash-count">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon spill">
-                        <i class="fas fa-tint"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Spill Detections</h3>
-                        <p id="spill-count">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon pending">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Pending Tasks</h3>
-                        <p id="pending-count">0</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon completed">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3>Completed Tasks</h3>
-                        <p id="completed-count">0</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-8">
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h2>Recent Detections</h2>
+            <div class="dashboard-content">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon garbage">
+                            <i class="fas fa-trash-alt"></i>
                         </div>
-                        <div class="panel-body">
-                            <div class="table-container">
-                                <table id="recent-detections-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Type</th>
-                                            <th>Location</th>
-                                            <th>Time</th>
-                                            <th>Confidence</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="recent-detections-body">
-                                        <!-- Data will be populated by JavaScript -->
-                                    </tbody>
-                                </table>
+                        <div class="stat-details">
+                            <h3>Garbage Detected</h3>
+                            <p class="stat-count" id="garbage-count">0</p>
+                            <p class="stat-time">Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon spill">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Spills Detected</h3>
+                            <p class="stat-count" id="spill-count">0</p>
+                            <p class="stat-time">Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon task">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Tasks Assigned</h3>
+                            <p class="stat-count" id="task-count">0</p>
+                            <p class="stat-time">Today</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Tasks Completed</h3>
+                            <p class="stat-count" id="completed-count">0</p>
+                            <p class="stat-time">Today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-row">
+                    <div class="detection-feed">
+                        <h2>Live Detection Feed</h2>
+                        <div class="camera-feed">
+                            <div class="camera-container">
+                                <img id="webcam" src="placeholder.jpg" alt="Live Camera Feed">
+                                <canvas id="detection-canvas"></canvas>
+                                <div class="camera-overlay">
+                                    <div class="camera-controls">
+                                        <button id="start-camera" class="btn btn-primary"><i class="fas fa-play"></i> Start Camera</button>
+                                        <button id="stop-camera" class="btn btn-danger"><i class="fas fa-stop"></i> Stop Camera</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detection-status">
+                                <div id="status-indicator" class="status-idle">
+                                    <span id="status-text">Camera Idle</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-4">
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h2>Cleaner Status</h2>
-                        </div>
-                        <div class="panel-body">
-                            <div id="cleaner-status">
-                                <!-- Data will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel mt-4">
-                        <div class="panel-header">
-                            <h2>Detection Breakdown</h2>
-                        </div>
-                        <div class="panel-body">
-                            <canvas id="detection-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Detections Page -->
-        <div class="page-content hidden" id="detections-page">
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>All Detections</h2>
-                    <div class="panel-actions">
-                        <div class="filter-container">
-                            <select id="detection-filter">
-                                <option value="all">All Types</option>
-                                <option value="trash">Trash</option>
-                                <option value="spill">Spill</option>
-                            </select>
-                            <select id="status-filter">
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="assigned">Assigned</option>
-                                <option value="completed">Completed</option>
-                            </select>
+                    <div class="recent-alerts">
+                        <h2>Recent Alerts</h2>
+                        <div class="alerts-list" id="alerts-container">
+                            <!-- Alerts will be dynamically added here -->
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="table-container">
-                        <table id="all-detections-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Image</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
-                                    <th>Time</th>
-                                    <th>Confidence</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="all-detections-body">
-                                <!-- Data will be populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Tasks Page -->
-        <div class="page-content hidden" id="tasks-page">
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>Tasks Management</h2>
-                    <div class="panel-actions">
-                        <div class="filter-container">
-                            <select id="task-filter">
-                                <option value="all">All Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="assigned">Assigned</option>
-                                <option value="completed">Completed</option>
-                            </select>
+                <div class="tasks-section">
+                    <div class="section-header">
+                        <h2>Cleaning Tasks</h2>
+                        <div class="filter-controls">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="pending">Pending</button>
+                            <button class="filter-btn" data-filter="assigned">Assigned</button>
+                            <button class="filter-btn" data-filter="completed">Completed</button>
                         </div>
                     </div>
-                </div>
-                <div class="panel-body">
-                    <div class="table-container">
-                        <table id="tasks-table">
+                    <div class="tasks-table-container">
+                        <table class="tasks-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Type</th>
                                     <th>Location</th>
                                     <th>Assigned To</th>
-                                    <th>Assigned At</th>
+                                    <th>Time Detected</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="tasks-body">
-                                <!-- Data will be populated by JavaScript -->
+                            <tbody id="tasks-container">
+                                <!-- Tasks will be dynamically added here -->
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Cleaners Page -->
-        <div class="page-content hidden" id="cleaners-page">
-            <div class="row">
-                <div class="col-8">
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h2>Cleaners</h2>
-                        </div>
-                        <div class="panel-body">
-                            <div class="table-container">
-                                <table id="cleaners-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Tasks Completed</th>
-                                            <th>Avg. Time to Complete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="cleaners-body">
-                                        <!-- Data will be populated by JavaScript -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="panel">
-                        <div class="panel-header">
-                            <h2>Add New Cleaner</h2>
-                        </div>
-                        <div class="panel-body">
-                            <form id="add-cleaner-form">
-                                <div class="form-group">
-                                    <label for="cleaner-name">Name</label>
-                                    <input type="text" id="cleaner-name" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Add Cleaner</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Live Monitoring Page -->
-        <div class="page-content hidden" id="monitoring-page">
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>Live Camera Feed</h2>
-                </div>
-                <div class="panel-body">
-                    <div class="camera-container">
-                        <div class="camera-feed">
-                            <img id="camera-feed-img" src="images/placeholder-camera.jpg" alt="Camera Feed">
-                            <div class="camera-overlay">
-                                <div class="status-indicator" id="camera-status">
-                                    <span class="status active">● LIVE</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="camera-controls">
-                            <button id="start-camera-btn" class="btn btn-primary">
-                                <i class="fas fa-play"></i> Start Camera
-                            </button>
-                            <button id="stop-camera-btn" class="btn btn-danger">
-                                <i class="fas fa-stop"></i> Stop Camera
-                            </button>
-                            <button id="launch-detector-btn" class="btn btn-success">
-                                <i class="fas fa-search"></i> Launch Detector
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel mt-4">
-                <div class="panel-header">
-                    <h2>Detection Log</h2>
-                </div>
-                <div class="panel-body">
-                    <div class="log-container">
-                        <pre id="detection-log">Camera monitoring not started...</pre>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Task Detail Modal -->
-    <div class="modal" id="task-detail-modal">
+    <div class="modal" id="task-modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Task Details</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="task-details">
-                    <div class="task-image">
-                        <img id="task-detail-image" src="" alt="Task Image">
-                    </div>
-                    <div class="task-info">
-                        <h3>Detection Information</h3>
-                        <p><strong>Type:</strong> <span id="task-type"></span></p>
-                        <p><strong>Location:</strong> <span id="task-location"></span></p>
-                        <p><strong>Detected:</strong> <span id="task-detected-time"></span></p>
-                        <p><strong>Confidence:</strong> <span id="task-confidence"></span></p>
-                        
-                        <h3>Assignment Information</h3>
-                        <p><strong>Assigned To:</strong> <span id="task-assigned-to"></span></p>
-                        <p><strong>Assigned At:</strong> <span id="task-assigned-time"></span></p>
-                        <p><strong>Status:</strong> <span id="task-status"></span></p>
-                        
-                        <div class="task-actions">
-                            <button id="complete-task-btn" class="btn btn-success">Mark as Completed</button>
-                        </div>
-                    </div>
+            <span class="close-modal">&times;</span>
+            <h2>Assign Task</h2>
+            <form id="assign-task-form">
+                <div class="form-group">
+                    <label for="task-id">Task ID:</label>
+                    <input type="text" id="task-id" readonly>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="task-type">Type:</label>
+                    <input type="text" id="task-type" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="task-location">Location:</label>
+                    <input type="text" id="task-location" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="assigned-to">Assign To:</label>
+                    <select id="assigned-to" required>
+                        <option value="">Select Cleaner</option>
+                        <option value="John Doe">John Doe</option>
+                        <option value="Jane Smith">Jane Smith</option>
+                        <option value="Mike Johnson">Mike Johnson</option>
+                        <option value="Sarah Davis">Sarah Davis</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="priority">Priority:</label>
+                    <select id="priority" required>
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Assign Task</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-assignment">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html> 
