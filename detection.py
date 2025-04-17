@@ -9,7 +9,7 @@ import zipfile
 import shutil
 
 class GarbageDetector:
-    def __init__(self, model_path='model/best.pt', conf_threshold=0.5):
+    def __init__(self, model_path='model/best.pt', conf_threshold=0.25):
         """
         Initialize the garbage detector with a trained YOLOv5 model
         
@@ -118,19 +118,43 @@ class GarbageDetector:
         df = results.pandas().xyxy[0]
         
         for _, row in df.iterrows():
+            # Map to trash if this is general COCO dataset
+            name = row['name']
+            class_id = row['class']
+            
+            # Map COCO classes to trash categories (for pre-trained model)
+            if name in ['bottle', 'cup', 'wine glass', 'fork', 'knife', 'spoon', 
+                       'bowl', 'banana', 'apple', 'sandwich', 'orange', 'paper', 
+                       'book', 'clock', 'vase', 'scissors', 'teddy bear', 
+                       'toothbrush', 'laptop', 'cell phone']:
+                name = 'trash'
+            
             detection = {
-                'class': row['class'],
-                'name': row['name'],
+                'class': class_id,
+                'name': name,
                 'confidence': row['confidence'],
                 'bbox': [row['xmin'], row['ymin'], row['xmax'], row['ymax']]
             }
             detections.append(detection)
         
-        # Render the detections on the frame
-        annotated_frame = results.render()[0]
-        
-        # Convert back to BGR for OpenCV
-        annotated_frame = cv2.cvtColor(annotated_frame, cv2.COLOR_RGB2BGR)
+        # Render the detections on the frame with different colors for trash
+        annotated_frame = frame.copy()
+        for detection in detections:
+            x1, y1, x2, y2 = [int(coord) for coord in detection['bbox']]
+            
+            # Use red color for trash items
+            if detection['name'] == 'trash':
+                color = (0, 0, 255)  # Red for trash
+            else:
+                color = (0, 255, 0)  # Green for others
+            
+            # Draw bounding box
+            cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), color, 2)
+            
+            # Add label
+            label = f"{detection['name']}: {detection['confidence']:.2f}"
+            cv2.putText(annotated_frame, label, (x1, y1 - 10), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
         
         return detections, annotated_frame
     
@@ -145,8 +169,12 @@ class GarbageDetector:
             bool: True if garbage is detected
         """
         for detection in detections:
-            # Check if the class is 'trash' (class 1 in our dataset)
+            # Check for trash or garbage-related classes
             if detection['name'] == 'trash' and detection['confidence'] >= self.conf_threshold:
+                return True
+            
+            # For pre-trained COCO model, check additional classes that often represent garbage
+            if detection['name'] in ['bottle', 'cup', 'wine glass', 'book', 'cell phone', 'laptop', 'vase'] and detection['confidence'] >= self.conf_threshold:
                 return True
         
         return False
