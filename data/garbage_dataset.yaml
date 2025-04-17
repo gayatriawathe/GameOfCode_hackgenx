@@ -1,0 +1,7 @@
+names:
+- garbage
+nc: 1
+path: GarbageDataSet
+test: images/test
+train: images/train
+val: images/val

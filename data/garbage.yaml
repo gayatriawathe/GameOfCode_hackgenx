@@ -1,0 +1,8 @@
+names:
+- bin
+- trash
+nc: 2
+path: C:\Users\USER\Desktop\Trupss\GarbageDataSet
+test: C:\Users\USER\Desktop\Trupss\GarbageDataSet\test/images
+train: C:\Users\USER\Desktop\Trupss\GarbageDataSet\train/images
+val: C:\Users\USER\Desktop\Trupss\GarbageDataSet\valid/images
