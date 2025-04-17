@@ -79,6 +79,20 @@ CleanSight/
 - **infer.py**: Utilities for inference optimization and result formatting
 - **requirements.txt**: List of Python packages required to run the system
 
+## 📸 Screenshots
+
+### 🖥️ Live Detection Interface
+![Live Detection Interface](static/img/screenshot1.png)
+
+### 📊 Analytics Dashboard
+![Analytics Dashboard](static/img/screenshot2.png)
+
+### 🌾 Rural Monitoring Upload Interface
+![Rural Monitoring Upload](static/img/screenshot3.png)
+
+### 🌾 Rural Monitoring Upload Interface
+![Rural Monitoring Upload](static/img/screenshot4.png)
+
 ## Setup Instructions
 
 ### 1. Install Dependencies
