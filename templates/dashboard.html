@@ -12,11 +12,14 @@
 <body>
     <div class="app-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3><i class="fas fa-eye"></i> CleanSight</h3>
+                <button class="d-md-none btn btn-link text-white" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
                     <a class="nav-link" href="/">
                         <i class="fas fa-video"></i>
@@ -34,6 +37,12 @@
                         <i class="fas fa-bell"></i>
                         <span>Alerts</span>
                         <span class="badge rounded-pill" id="alertCount">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Rulararea">
+                        <i class="fas fa-tree"></i>
+                        <span>Rural Area</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -115,8 +124,9 @@
                 <div class="card-header">
                     <h5><i class="fas fa-tasks"></i> Recent Tasks</h5>
                     <div class="card-actions">
-                        <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> New Task</button>
-                        <button class="btn btn-sm"><i class="fas fa-ellipsis-v"></i></button>
+                        <button class="btn btn-primary btn-sm" id="newTaskBtn"><i class="fas fa-plus"></i> <span class="d-none d-sm-inline">New Task</span></button>
+                        <button class="btn btn-sm d-sm-none"><i class="fas fa-filter"></i></button>
+                        <button class="btn btn-sm d-none d-sm-block"><i class="fas fa-ellipsis-v"></i></button>
                     </div>
                 </div>
                 <div class="card-body p-0">
@@ -125,9 +135,9 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Timestamp</th>
+                                    <th>Time</th>
                                     <th>Location</th>
-                                    <th>Assigned To</th>
+                                    <th class="d-none d-md-table-cell">Assigned To</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -136,9 +146,9 @@
                                 <!-- Example data - will be replaced dynamically -->
                                 <tr>
                                     <td>#1</td>
-                                    <td>2025-04-16 10:23:45</td>
+                                    <td>10:23:45</td>
                                     <td>Camera 1</td>
-                                    <td>Cleaning Team 1</td>
+                                    <td class="d-none d-md-table-cell">Team 1</td>
                                     <td><span class="badge bg-success">Resolved</span></td>
                                     <td>
                                         <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
@@ -146,9 +156,9 @@
                                 </tr>
                                 <tr>
                                     <td>#2</td>
-                                    <td>2025-04-16 11:42:12</td>
+                                    <td>11:42:12</td>
                                     <td>Camera 1</td>
-                                    <td>Cleaning Team 2</td>
+                                    <td class="d-none d-md-table-cell">Team 2</td>
                                     <td><span class="badge bg-warning">Pending</span></td>
                                     <td>
                                         <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i></button>
@@ -171,13 +181,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
                         <div>
                             <h4 id="alertMessage">Garbage detected! Cleanup required.</h4>
                             <p><strong>Location:</strong> <span id="alertLocation">Camera 1</span></p>
                             <p><strong>Time:</strong> <span id="alertTime"></span></p>
                         </div>
-                        <div>
+                        <div class="mt-2 mt-md-0">
                             <span class="alert-priority badge bg-danger">High Priority</span>
                         </div>
                     </div>
@@ -196,6 +206,58 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="resolveAlertBtn">Mark as Resolved</button>
                     <button type="button" class="btn btn-success" id="assignTaskBtn">Assign Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Task Modal -->
+    <div class="modal fade" id="newTaskModal" tabindex="-1" aria-labelledby="newTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="newTaskModalLabel"><i class="fas fa-plus-circle"></i> Create New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newTaskForm">
+                        <div class="mb-3">
+                            <label for="taskMessage" class="form-label">Task Description</label>
+                            <input type="text" class="form-control" id="taskMessage" required placeholder="Clean up trash in lobby area">
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskLocation" class="form-label">Location</label>
+                            <select class="form-select" id="taskLocation" required>
+                                <option value="">Select location</option>
+                                <option value="Camera 1">Camera 1</option>
+                                <option value="Camera 2">Camera 2</option>
+                                <option value="Lobby">Lobby</option>
+                                <option value="Kitchen">Kitchen</option>
+                                <option value="Meeting Room">Meeting Room</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskAssignee" class="form-label">Assign To</label>
+                            <select class="form-select" id="taskAssignee" required>
+                                <option value="">Select assignee</option>
+                                <option value="team1">Cleaning Team 1</option>
+                                <option value="team2">Cleaning Team 2</option>
+                                <option value="team3">Maintenance Staff</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="taskPriority" class="form-label">Priority</label>
+                            <select class="form-select" id="taskPriority">
+                                <option value="high">High</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="createTaskBtn">Create Task</button>
                 </div>
             </div>
         </div>
