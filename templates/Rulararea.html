@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSight - Rural Area Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Specialized styles for the Rural Area page */
+        .rural-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #34495e;
+            font-size: 1.1em;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-rural {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-rural:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+
+        .location-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .location-input {
+            flex: 1;
+        }
+
+        .get-location-btn {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            white-space: nowrap;
+        }
+
+        .preview-image {
+            max-width: 300px;
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-image:hover {
+            transform: scale(1.05);
+        }
+
+        .request-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .request-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .request-card p {
+            margin-bottom: 10px;
+            color: #34495e;
+            line-height: 1.6;
+        }
+
+        .status-pending {
+            color: #e67e22;
+            font-weight: 500;
+            background: rgba(230, 126, 34, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .timestamp {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .request-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-eye"></i> CleanSight</h3>
+                <button class="d-md-none btn btn-link text-white" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-video"></i>
+                        <span>Live Monitoring</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="alertsLink">
+                        <i class="fas fa-bell"></i>
+                        <span>Alerts</span>
+                        <span class="badge rounded-pill" id="alertCount">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/Rulararea">
+                        <i class="fas fa-tree"></i>
+                        <span>Rural Area</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <p>CleanSight &copy; 2025</p>
+                <p class="version">v1.0</p>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1>Rural Area Garbage Collection</h1>
+                    <p class="text-muted">Request collection services for rural locations</p>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <span>Admin User</span>
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="rural-container">
+                <form id="requestForm">
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" rows="4" required placeholder="Please describe the garbage collection needed..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo">Upload Photo:</label>
+                        <div class="file-input-wrapper">
+                            <label class="custom-file-upload">
+                                <input type="file" id="photo" accept="image/*">
+                                📸 Choose Photo
+                            </label>
+                        </div>
+                        <div id="imagePreview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <div class="location-group">
+                            <div class="location-input">
+                                <input type="text" id="location" required placeholder="Enter location">
+                            </div>
+                            <button type="button" class="btn-rural get-location-btn" onclick="getLocation()">📍 Get Location</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-rural btn-submit">Submit Request</button>
+                </form>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h5><i class="fas fa-list"></i> Recent Requests</h5>
+                </div>
+                <div class="card-body">
+                    <div id="requestsList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="alertModalLabel"><i class="fas fa-exclamation-triangle"></i> Garbage Alert!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-column flex-md-row justify-content-between">
+                        <div>
+                            <h4 id="alertMessage">Garbage detected! Cleanup required.</h4>
+                            <p><strong>Location:</strong> <span id="alertLocation">Camera 1</span></p>
+                            <p><strong>Time:</strong> <span id="alertTime"></span></p>
+                        </div>
+                        <div class="mt-2 mt-md-0">
+                            <span class="alert-priority badge bg-danger">High Priority</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        // Initialize requests from localStorage or empty array if nothing stored
+        let requests = JSON.parse(localStorage.getItem('ruralRequests') || '[]');
+        const socket = io();
+        let alertCount = document.getElementById('alertCount');
+
+        // Display existing requests when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load and display requests from localStorage
+            updateRequestsList();
+        });
+
+        // Handle alerts count
+        socket.on('alerts', (serverAlerts) => {
+            const pendingCount = serverAlerts.filter(a => a.status === 'pending').length;
+            updateAlertCount(pendingCount);
+        });
+
+        function updateAlertCount(count) {
+            if (alertCount) {
+                alertCount.textContent = count;
+                if (count > 0) {
+                    alertCount.style.display = 'inline-block';
+                } else {
+                    alertCount.style.display = 'none';
+                }
+            }
+        }
+
+        // Toggle sidebar on mobile
+        const toggleSidebar = document.getElementById('toggleSidebar');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (toggleSidebar) {
+            toggleSidebar.addEventListener('click', function() {
+                navMenu.classList.toggle('show-menu');
+            });
+        }
+
+        document.getElementById('photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const location = `${position.coords.latitude}, ${position.coords.longitude}`;
+                        document.getElementById('location').value = location;
+                    },
+                    error => {
+                        alert('Error getting location. Please enter manually.');
+                    }
+                );
+            }
+        }
+
+        document.getElementById('requestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const description = document.getElementById('description').value;
+            const location = document.getElementById('location').value;
+            const imagePreview = document.querySelector('#imagePreview img');
+            
+            // Create new request
+            const request = {
+                id: Date.now(),
+                description,
+                location,
+                photo: imagePreview ? imagePreview.src : null,
+                timestamp: new Date().toLocaleString(),
+                status: 'Pending'
+            };
+
+            // Add to requests array
+            requests.unshift(request);
+            
+            // Save to localStorage (truncate large images if needed)
+            saveRequestsToLocalStorage();
+            
+            // Update the UI
+            updateRequestsList();
+            
+            // Create a corresponding task for the dashboard
+            createDashboardTask(description, location);
+            
+            // Reset form
+            this.reset();
+            document.getElementById('imagePreview').innerHTML = '';
+            
+            // Show success toast
+            showToast('Request submitted successfully!', 'success');
+        });
+
+        // Function to create a task in the dashboard
+        function createDashboardTask(description, location) {
+            // Create a task alert object for the dashboard
+            const newTask = {
+                message: `Rural Area Request: ${description}`,
+                location: location,
+                assignedTo: '',
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+                priority: 'medium'
+            };
+            
+            // Send the task to the server's API
+            fetch('/api/alerts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newTask)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create dashboard task');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dashboard task created:', data);
+            })
+            .catch(error => {
+                console.error('Error creating dashboard task:', error);
+                showToast('Warning: Could not create dashboard task', 'warning');
+            });
+        }
+
+        function saveRequestsToLocalStorage() {
+            try {
+                // Make a copy of the requests to modify
+                const requestsToSave = requests.map(req => {
+                    // If the photo data URL is too large (over ~0.5MB), store a placeholder
+                    if (req.photo && req.photo.length > 500000) {
+                        return {
+                            ...req,
+                            photo: null, // Don't store large images in localStorage
+                            hadPhoto: true // Flag to indicate there was a photo
+                        };
+                    }
+                    return req;
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('ruralRequests', JSON.stringify(requestsToSave));
+            } catch (e) {
+                console.error('Error saving requests to localStorage:', e);
+                showToast('Warning: Could not save all request data for future sessions.', 'warning');
+            }
+        }
+
+        function updateRequestsList() {
+            const requestsList = document.getElementById('requestsList');
+            
+            if (requests.length === 0) {
+                requestsList.innerHTML = `
+                    <div class="text-center text-muted my-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No requests submitted yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            requestsList.innerHTML = requests.map(request => `
+                <div class="request-card">
+                    <p><strong>Description:</strong> ${request.description}</p>
+                    ${request.photo ? `<img src="${request.photo}" class="preview-image">` : 
+                     request.hadPhoto ? `<div class="text-muted"><i class="fas fa-image"></i> Photo was uploaded (not stored for page refresh)</div>` : ''}
+                    <p><strong>Location:</strong> ${request.location}</p>
+                    <p><strong>Status:</strong> <span class="status-pending">${request.status}</span></p>
+                    <p class="timestamp">Submitted: ${request.timestamp}</p>
+                    <div class="mt-3">
+                        <button class="btn btn-sm btn-outline-danger delete-request" data-id="${request.id}">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-request').forEach(button => {
+                button.addEventListener('click', function() {
+                    const requestId = parseInt(this.getAttribute('data-id'));
+                    deleteRequest(requestId);
+                });
+            });
+        }
+        
+        function deleteRequest(requestId) {
+            // Filter out the deleted request
+            requests = requests.filter(req => req.id !== requestId);
+            
+            // Save updated requests to localStorage
+            saveRequestsToLocalStorage();
+            
+            // Update the UI
+            updateRequestsList();
+            
+            // Show toast
+            showToast('Request deleted', 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Create the toast element
+            const toastEl = document.createElement('div');
+            toastEl.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'primary'} border-0`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+            
+            // Set toast content
+            toastEl.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            
+            // Add to container
+            toastContainer.appendChild(toastEl);
+            
+            // Initialize and show the toast
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+            
+            // Remove the toast after it's hidden
+            toastEl.addEventListener('hidden.bs.toast', function() {
+                toastEl.remove();
+            });
+        }
+    </script>
+</body>
+</html> 
